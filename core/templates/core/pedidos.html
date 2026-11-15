@@ -1,0 +1,318 @@
+
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CANES | Pedidos</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Montserrat", sans-serif;
+            background-color: #f6f6f6;
+            color: #111111;
+        }
+
+        .pagina {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .topo {
+            margin-bottom: 32px;
+        }
+
+        .topo h1 {
+            margin: 0 0 12px;
+            font-size: 36px;
+            font-weight: 800;
+            color: #111111;
+        }
+
+        .topo p {
+            margin: 0;
+            font-size: 16px;
+            line-height: 1.6;
+            color: #444444;
+            max-width: 700px;
+        }
+
+        .bloco {
+            margin-bottom: 40px;
+        }
+
+        .bloco h2 {
+            margin: 0 0 20px;
+            font-size: 24px;
+            font-weight: 700;
+            color: #111111;
+        }
+
+        .indicadores {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .indicador {
+            background-color: #ffffff;
+            border: 2px solid #ff7a00;
+            border-radius: 16px;
+            padding: 24px 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+        }
+
+        .indicador span {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: #555555;
+            margin-bottom: 10px;
+        }
+
+        .indicador strong {
+            display: block;
+            font-size: 28px;
+            font-weight: 800;
+            color: #111111;
+        }
+
+        .lista-pedidos {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+
+        .pedido-card {
+            background-color: #ffffff;
+            border: 2px solid #111111;
+            border-radius: 18px;
+            padding: 24px;
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .pedido-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 16px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        .pedido-topo {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 18px;
+            flex-wrap: wrap;
+        }
+
+        .pedido-topo h3 {
+            margin: 0;
+            font-size: 22px;
+            font-weight: 800;
+            color: #111111;
+        }
+
+        .status {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px 14px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+
+        .status-pendente {
+            background-color: #fff0e1;
+            color: #d96a00;
+            border: 1px solid #ffb066;
+        }
+
+        .status-concluido {
+            background-color: #eaf8ef;
+            color: #1f8b4d;
+            border: 1px solid #8dd3a8;
+        }
+
+        .pedido-info {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 14px 18px;
+        }
+
+        .pedido-item {
+            background-color: #f8f8f8;
+            border-radius: 12px;
+            padding: 14px;
+        }
+
+        .pedido-item span {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #666666;
+            margin-bottom: 6px;
+        }
+
+        .pedido-item strong {
+            font-size: 16px;
+            font-weight: 700;
+            color: #111111;
+        }
+
+        .pedido-vazio {
+            background-color: #ffffff;
+            border: 2px dashed #ff7a00;
+            border-radius: 16px;
+            padding: 24px;
+            text-align: center;
+            font-size: 16px;
+            font-weight: 600;
+            color: #444444;
+        }
+
+        @media (max-width: 992px) {
+            .indicadores {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .lista-pedidos {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .pagina {
+                padding: 28px 16px;
+            }
+
+            .topo h1 {
+                font-size: 28px;
+            }
+
+            .bloco h2 {
+                font-size: 22px;
+            }
+
+            .indicadores {
+                grid-template-columns: 1fr;
+            }
+
+            .pedido-info {
+                grid-template-columns: 1fr;
+            }
+
+            .indicador strong {
+                font-size: 24px;
+            }
+
+            .pedido-topo h3 {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="pagina">
+
+        <section class="topo">
+            <h1>Pedidos CANES</h1>
+            <p>Realize e acompanhe os pedidos dos clientes, visualize os indicadores e consulte os detalhes de cada pedido.</p>
+        </section>
+
+        <section class="bloco">
+            <h2>Resumo dos pedidos</h2>
+
+            <div class="indicadores">
+                <div class="indicador">
+                    <span>Total de pedidos</span>
+                    <strong>{{ total_pedidos }}</strong>
+                </div>
+
+                <div class="indicador">
+                    <span>Pedidos pendentes</span>
+                    <strong>{{ pedidos_pendentes }}</strong>
+                </div>
+
+                <div class="indicador">
+                    <span>Pedidos concluídos</span>
+                    <strong>{{ pedidos_concluidos }}</strong>
+                </div>
+
+                <div class="indicador">
+                    <span>Valor total dos pedidos</span>
+                    <strong>R$ {{ valor_total_pedidos|floatformat:2 }}</strong>
+                </div>
+            </div>
+        </section>
+
+        <section class="bloco">
+            <h2>Lista de pedidos</h2>
+
+            <div class="lista-pedidos">
+                {% for pedido in pedidos %}
+                    <article class="pedido-card">
+                        <div class="pedido-topo">
+                            <h3>Pedido {{ pedido.numero }}</h3>
+
+                            {% if pedido.situacao == "Pendente" %}
+                                <span class="status status-pendente">{{ pedido.situacao }}</span>
+                            {% else %}
+                                <span class="status status-concluido">{{ pedido.situacao }}</span>
+                            {% endif %}
+                        </div>
+
+                        <div class="pedido-info">
+                            <div class="pedido-item">
+                                <span>Cliente</span>
+                                <strong>{{ pedido.cliente }}</strong>
+                            </div>
+
+                            <div class="pedido-item">
+                                <span>Produto</span>
+                                <strong>{{ pedido.produto }}</strong>
+                            </div>
+
+                            <div class="pedido-item">
+                                <span>Preço unitário</span>
+                                <strong>R$ {{ pedido.preco|floatformat:2 }}</strong>
+                            </div>
+
+                            <div class="pedido-item">
+                                <span>Quantidade</span>
+                                <strong>{{ pedido.quantidade }}</strong>
+                            </div>
+
+                            <div class="pedido-item">
+                                <span>Valor do pedido</span>
+                                <strong>R$ {{ pedido.valor_total|floatformat:2 }}</strong>
+                            </div>
+                        </div>
+                    </article>
+                {% empty %}
+                    <div class="pedido-vazio">
+                        Nenhum pedido cadastrado.
+                    </div>
+                {% endfor %}
+            </div>
+        </section>
+
+    </main>
+</body>
+
+</html>

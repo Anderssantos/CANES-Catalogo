@@ -1,0 +1,632 @@
+
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#102a43">
+    <title>{{ titulo|default:"Catálogo de produtos" }} | Canes</title>
+
+    <style>
+        :root {
+            --navy: #102a43;
+            --blue: #1976d2;
+            --blue-soft: #eaf3ff;
+            --ink: #172b4d;
+            --muted: #6b7c93;
+            --line: #e5eaf0;
+            --surface: #ffffff;
+            --background: #f5f8fc;
+            --success: #16845b;
+            --shadow: 0 12px 30px rgba(16, 42, 67, 0.06);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            color: var(--ink);
+            background: var(--background);
+            font-family: Inter, Arial, sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            width: min(1120px, calc(100% - 40px));
+            margin: auto;
+        }
+
+        .topbar {
+            background: var(--navy);
+            color: #dcecff;
+            font-size: 12px;
+            letter-spacing: 0.03em;
+        }
+
+        .topbar-inner {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+        }
+
+        .header {
+            background: var(--surface);
+            border-bottom: 1px solid var(--line);
+        }
+
+        .nav {
+            min-height: 76px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--navy);
+            text-decoration: none;
+            font-weight: 800;
+            font-size: 22px;
+        }
+
+        .brand-mark {
+            display: grid;
+            place-items: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            color: white;
+            background: linear-gradient(135deg, var(--blue), #41a6f6);
+        }
+
+        .nav-label {
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        main {
+            padding: 48px 0 70px;
+        }
+
+        .hero {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 30px;
+            margin-bottom: 32px;
+        }
+
+        .eyebrow {
+            color: var(--blue);
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+        }
+
+        h1 {
+            margin: 10px 0;
+            color: var(--navy);
+            font-size: clamp(30px, 4vw, 44px);
+        }
+
+        .intro {
+            max-width: 620px;
+            margin: 0;
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        .hero-badge {
+            min-width: 170px;
+            padding: 20px;
+            border: 1px solid #d5e5f7;
+            border-radius: 14px;
+            background: var(--blue-soft);
+            text-align: center;
+        }
+
+        .hero-badge strong {
+            display: block;
+            color: var(--navy);
+            font-size: 30px;
+        }
+
+        .hero-badge span {
+            color: var(--blue);
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .summary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .summary-card {
+            padding: 22px;
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            background: var(--surface);
+            box-shadow: var(--shadow);
+        }
+
+        .summary-card strong {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--navy);
+            font-size: 26px;
+        }
+
+        .summary-card span {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .catalog {
+            overflow: hidden;
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            background: var(--surface);
+            box-shadow: var(--shadow);
+        }
+
+        .catalog-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            padding: 28px;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .catalog-head h2 {
+            margin: 0;
+            color: var(--navy);
+            font-size: 22px;
+        }
+
+        .catalog-head p {
+            margin: 8px 0 0;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .tag {
+            padding: 8px 14px;
+            border-radius: 20px;
+            color: var(--success);
+            background: #e8f7f0;
+            font-size: 12px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .tag.empty-tag {
+            color: var(--muted);
+            background: #f1f4f7;
+        }
+
+        .catalog-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 22px 28px;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .tab-button {
+            padding: 12px 18px;
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            background: #f5f8fc;
+            color: var(--muted);
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        .tab-button:hover {
+            color: var(--blue);
+            border-color: var(--blue);
+        }
+
+        .tab-button.active {
+            color: white;
+            background: var(--navy);
+            border-color: var(--navy);
+        }
+
+        .product-list {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
+            padding: 24px 28px;
+        }
+
+        .product {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 20px;
+            padding: 22px;
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            background: #ffffff;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .product:hover {
+            border-color: #b7d4f1;
+            box-shadow: 0 8px 20px rgba(16, 42, 67, 0.06);
+        }
+
+        .product-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        .product-icon {
+            display: grid;
+            place-items: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            color: var(--blue);
+            background: var(--blue-soft);
+            font-size: 18px;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 7px 12px;
+            border-radius: 8px;
+            background: #e8f7f0;
+            color: var(--success);
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .status.out {
+            color: #a64b45;
+            background: #fff0ef;
+        }
+
+        .product h3 {
+            margin: 0 0 8px;
+            color: var(--navy);
+            font-size: 18px;
+        }
+
+        .product-label {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .product-description {
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .product-code {
+            display: block;
+            margin-top: 10px;
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .product-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 15px;
+            padding-top: 18px;
+            border-top: 1px solid var(--line);
+        }
+
+        .price-label {
+            display: block;
+            margin-bottom: 6px;
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .price {
+            color: var(--navy);
+            font-size: 23px;
+            font-weight: 800;
+        }
+
+        .stock {
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.6;
+            text-align: right;
+        }
+
+        .empty {
+            grid-column: 1 / -1;
+            padding: 45px 20px;
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            color: var(--muted);
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .product[hidden] {
+            display: none;
+        }
+
+        footer {
+            padding: 25px 0;
+            border-top: 1px solid var(--line);
+            color: var(--muted);
+            font-size: 12px;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .hero {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .hero-badge {
+                width: 100%;
+            }
+
+            .summary {
+                grid-template-columns: 1fr;
+            }
+
+            .product-list {
+                grid-template-columns: 1fr;
+            }
+
+            .catalog-head {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                width: calc(100% - 28px);
+            }
+
+            main {
+                padding: 30px 0 45px;
+            }
+
+            .topbar-inner span:last-child,
+            .nav-label {
+                display: none;
+            }
+
+            .catalog-head,
+            .catalog-tabs,
+            .product-list {
+                padding: 18px;
+            }
+
+            .catalog-tabs {
+                flex-direction: column;
+            }
+
+            .tab-button {
+                width: 100%;
+            }
+
+            .product {
+                padding: 18px;
+            }
+
+            .price {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="topbar">
+        <div class="topbar-inner container">
+            <span>CANES • Soluções que geram resultados</span>
+            <span>Catálogo de produtos</span>
+        </div>
+    </div>
+
+    <header class="header">
+        <nav class="nav container" aria-label="Navegação principal">
+            <a class="brand" href="#catalogo">
+                <span class="brand-mark">C</span>
+                canes
+            </a>
+            <span class="nav-label">Qualidade, confiança e excelência</span>
+        </nav>
+    </header>
+
+    <main>
+        <div class="container">
+
+            <section class="hero">
+                <div>
+                    <span class="eyebrow">Portfólio Canes</span>
+                    <h1>{{ titulo|default:"Catálogo de produtos" }}</h1>
+                    <p class="intro">
+                        {{ descricao|default:"Encontre as melhores soluções para o seu negócio em um só lugar. Consulte preços e disponibilidade dos nossos produtos." }}
+                    </p>
+                </div>
+
+                <div class="hero-badge">
+                    <strong>{{ quantidade_produtos }}</strong>
+                    <span>{{ subtitulo|default:"Seleção Canes" }}</span>
+                </div>
+            </section>
+
+            <section class="summary" aria-label="Resumo do catálogo">
+                <div class="summary-card">
+                    <strong>{{ quantidade_produtos }}</strong>
+                    <span>Produtos cadastrados</span>
+                </div>
+
+                <div class="summary-card">
+                    <strong>{{ quantidade_disponiveis }}</strong>
+                    <span>Produtos disponíveis</span>
+                </div>
+
+                <div class="summary-card">
+                    <strong>R$ {{ valor_total_estoque|floatformat:2 }}</strong>
+                    <span>Valor total em estoque</span>
+                </div>
+            </section>
+
+            <section class="catalog" id="catalogo" aria-labelledby="catalogo-titulo">
+
+                <div class="catalog-head">
+                    <div>
+                        <h2 id="catalogo-titulo">Catálogo de produtos</h2>
+                        <p>Consulte os produtos cadastrados e sua disponibilidade.</p>
+                    </div>
+
+                    {% if produtos %}
+                        <span class="tag">Catálogo ativo</span>
+                    {% else %}
+                        <span class="tag empty-tag">Sem produtos</span>
+                    {% endif %}
+                </div>
+
+                <div class="catalog-tabs" role="group" aria-label="Filtrar produtos">
+                    <button type="button" class="tab-button active" data-filter="todos" aria-pressed="true">
+                        Todos os produtos
+                    </button>
+
+                    <button type="button" class="tab-button" data-filter="disponiveis" aria-pressed="false">
+                        Disponíveis
+                    </button>
+
+                    <button type="button" class="tab-button" data-filter="indisponiveis" aria-pressed="false">
+                        Indisponíveis
+                    </button>
+                </div>
+
+                <div class="product-list">
+
+                    {% for item in produtos %}
+
+                        <article class="product" data-status="{% if item.estoque > 0 %}disponiveis{% else %}indisponiveis{% endif %}">
+
+                            <div>
+                                <div class="product-top">
+                                    <span class="product-icon">✦</span>
+
+                                    {% if item.estoque > 0 %}
+                                        <span class="status">Disponível</span>
+                                    {% else %}
+                                        <span class="status out">Indisponível</span>
+                                    {% endif %}
+                                </div>
+
+                                <h3>{{ item.nome }}</h3>
+
+                                {% if item.categoria %}
+                                    <span class="product-label">{{ item.categoria }}</span>
+                                {% else %}
+                                    <span class="product-label">Produto Canes</span>
+                                {% endif %}
+
+                                {% if item.descricao %}
+                                    <p class="product-description">{{ item.descricao }}</p>
+                                {% endif %}
+
+                                {% if item.codigo %}
+                                    <span class="product-code">Código: {{ item.codigo }}</span>
+                                {% endif %}
+                            </div>
+
+                            <div class="product-bottom">
+                                <div>
+                                    <span class="price-label">Preço unitário</span>
+                                    <span class="price">R$ {{ item.preco|floatformat:2 }}</span>
+                                </div>
+
+                                <span class="stock">
+                                    {{ item.estoque }} unidade{{ item.estoque|pluralize }}
+                                    <br>
+                                    em estoque
+                                </span>
+                            </div>
+
+                        </article>
+
+                    {% empty %}
+                        <div class="empty">Nenhum produto disponível para consulta no momento.</div>
+                    {% endfor %}
+
+                </div>
+
+                {% if produtos %}
+                    <p class="empty" id="filtro-vazio" hidden>
+                        Nenhum produto encontrado nesta categoria.
+                    </p>
+                {% endif %}
+
+            </section>
+        </div>
+    </main>
+
+    <footer>© Canes | Catálogo de produtos</footer>
+
+    <script>
+        const botoes = document.querySelectorAll(".tab-button");
+        const produtos = document.querySelectorAll(".product");
+        const mensagemVazia = document.getElementById("filtro-vazio");
+
+        botoes.forEach(function(botao) {
+            botao.addEventListener("click", function() {
+                const filtro = botao.dataset.filter;
+                let quantidadeVisivel = 0;
+
+                botoes.forEach(function(item) {
+                    const ativo = item === botao;
+
+                    item.classList.toggle("active", ativo);
+                    item.setAttribute("aria-pressed", ativo);
+                });
+
+                produtos.forEach(function(produto) {
+                    const mostrar = filtro === "todos" || produto.dataset.status === filtro;
+
+                    produto.hidden = !mostrar;
+
+                    if (mostrar) {
+                        quantidadeVisivel += 1;
+                    }
+                });
+
+                if (mensagemVazia) {
+                    mensagemVazia.hidden = quantidadeVisivel > 0;
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
